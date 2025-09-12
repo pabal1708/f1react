@@ -71,7 +71,21 @@ a {
   text-align: center;
   font-size: 2.5rem;
   font-weight: bold;
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
+  color: #333;
+}
+
+/* Clase estándar para espaciado entre título y contenido */
+.page-content {
+  margin-top: 2rem;
+  width: 100%;
+}
+
+/* Clase estándar para títulos de sección */
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
   color: #333;
 }	
 
@@ -94,5 +108,48 @@ margin: 8px;
 }
 
 .icon-card {
-  gap: 5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Clase estándar para iconos en títulos de cards */
+.card-title-icon {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+
+/* Estilos para el menú móvil */
+.mobile-menu-drawer .ant-drawer-body {
+  padding: 0;
+}
+
+.mobile-menu-drawer .ant-menu {
+  border-right: none;
+}
+
+.mobile-menu-drawer .ant-menu-item {
+  margin: 0;
+  padding: 0 16px;
+  height: 48px;
+  line-height: 48px;
+}
+
+.mobile-menu-drawer .ant-menu-item-selected {
+  background-color: #f0f9ff;
+  color: #1890ff;
+}
+
+/* Mejorar el botón hamburguesa en móviles */
+@media (max-width: 768px) {
+  .ant-btn-text {
+    padding: 8px;
+    height: auto;
+  }
+  
+  .ant-btn-text:hover {
+    background-color: #f5f5f5;
+  }
 }

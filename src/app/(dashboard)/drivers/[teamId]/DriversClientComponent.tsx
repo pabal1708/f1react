@@ -50,15 +50,15 @@ const DriversClientComponent = ({
 
   return (
     <main className="main-content">
-      <h1 className="title-main text-4xl font-bold mb-8 text-center">{`Pilotos de ${teamId}`}</h1>
+      <h1 className="title-main">{`Pilotos de ${teamId}`}</h1>
       {drivers.length > 0 ? (
-        <div className="w-full max-w-4xl">
+        <div className="page-content">
           <Row gutter={[16, 16]} justify="center">
             {drivers.map((driver) => (
               <Col key={driver.driverId} xs={24} sm={12} md={8} lg={6}>
                 <Card
                   title={
-                    <span className="flex items-center gap-2">
+                    <span className="card-title-icon">
                       <CarOutlined />
                       {`${driver.name} ${driver.surname}`}
                     </span>

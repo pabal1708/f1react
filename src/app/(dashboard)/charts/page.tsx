@@ -14,7 +14,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const { Text, Title } = Typography;
+const { Text } = Typography;
 
 interface DriverChampionshipData {
   driverId: string;
@@ -137,11 +137,12 @@ export default function ChartsPage() {
 
   return (
     <main className="main-content">
-      <Title level={2} className="title-main text-center mb-8">
+      <h1 className="title-main">
         Visualización de Campeonatos de F1 por Año
-      </Title>
+      </h1>
 
-      <div className="w-full max-w-md mb-8 flex gap-2">
+      <div className="page-content">
+        <div className="w-full max-w-md mb-8 flex gap-2">
         <Input
           placeholder="Introduce un año (ej: 2021)"
           value={year}
@@ -203,7 +204,7 @@ export default function ChartsPage() {
             <Col xs={24} md={12}>
               <Card
                 title={
-                  <span className="flex items-center gap-2">
+                  <span className="card-title-icon">
                     <TrophyOutlined />
                     Top 5 Pilotos - {year}
                   </span>
@@ -236,7 +237,7 @@ export default function ChartsPage() {
             <Col xs={24} md={12}>
               <Card
                 title={
-                  <span className="flex items-center gap-2">
+                  <span className="card-title-icon">
                     <CarOutlined />
                     Top 5 Constructores - {year}
                   </span>
@@ -284,7 +285,8 @@ export default function ChartsPage() {
               </Text>
             )}
         </Row>
-      )}
+        )}
+      </div>
     </main>
   );
 }

@@ -112,8 +112,9 @@ export default function Drivers() {
 
   return (
     <main className="main-content">
-      <h1 className="text-4xl font-bold mb-8 text-center">Buscador de Pilotos de F1</h1>
-      <div className="search-container">
+      <h1 className="title-main">Buscador de Pilotos de F1</h1>
+      <div className="page-content">
+        <div className="search-container">
         <Input
           placeholder="Buscar piloto por nombre..."
           value={searchQuery}
@@ -184,17 +185,17 @@ export default function Drivers() {
             />
           }
         />
-      </div>
-      {error && <Text type="danger" className="error-message mb-4">{error}</Text>}
-      {loading && <Spin size="large" tip="Cargando pilotos..." fullscreen />}
-      {!loading && !error && (drivers.length > 0 ? (
-        <div className="drivers-container">
+        </div>
+        {error && <Text type="danger" className="error-message mb-4">{error}</Text>}
+        {loading && <Spin size="large" tip="Cargando pilotos..." fullscreen />}
+        {!loading && !error && (drivers.length > 0 ? (
+          <div className="drivers-container">
           <Row gutter={[16, 16]} justify="center">
             {drivers.map((driver: any) => (
               <Col key={driver.driverId} xs={54} sm={12} md={8} lg={6}>
                 <Card
                   title={
-                    <span className="flex items-center gap-2">
+                    <span className="card-title-icon">
                       <CarOutlined />
                       {`${driver.name} ${driver.surname}`}
                     </span>
@@ -216,13 +217,14 @@ export default function Drivers() {
               </Col>
             ))}
           </Row>
-        </div>
-      ) : ( searchQuery.trim() && !loading && !error && yearSearchQuery.trim() && !/^[0-9]{4}$/.test(yearSearchQuery) ? (
-        <Text type="secondary">No se encontraron pilotos que coincidan con la búsqueda.</Text>
-      ) : (
-        <Text type="secondary">Introduce un nombre de piloto (al menos 4 caracteres) o un año (4 dígitos) para buscar.</Text>
-      )
-      ))}
+          </div>
+        ) : ( searchQuery.trim() && !loading && !error && yearSearchQuery.trim() && !/^[0-9]{4}$/.test(yearSearchQuery) ? (
+          <Text type="secondary">No se encontraron pilotos que coincidan con la búsqueda.</Text>
+        ) : (
+          <Text type="secondary">Introduce un nombre de piloto (al menos 4 caracteres) o un año (4 dígitos) para buscar.</Text>
+        )
+        ))}
+      </div>
     </main>
   );
 }

@@ -50,13 +50,13 @@ const Teams = () => {
   return (
     <main className="main-content">
       <h1 className="title-main">Formula 1 Teams</h1>
-      <div className="w-full">
+      <div className="page-content">
         <Row gutter={[16, 16]} justify="center">
           {teams.map((team) => (
             <Col key={team.teamId} xs={24} sm={12} md={8} lg={6}>
               <Card
                 title={
-                  <span className="flex items-center gap-2 icon-card">
+                  <span className="card-title-icon">
                     <TeamOutlined />
                     {team.teamName}
                   </span>

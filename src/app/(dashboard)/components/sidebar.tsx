@@ -4,8 +4,10 @@ import React, { useMemo, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { MenuProps } from "antd";
-import { Layout, Menu, Grid } from "antd";
+import { Layout, Menu, Grid, Button, Drawer } from "antd";
 import {
+  MenuOutlined,
+  CloseOutlined,
   // HomeOutlined,
   // TeamOutlined,
   // SettingOutlined,
@@ -132,7 +134,11 @@ export default function SidebarLayout({
   const pathname = usePathname();
   const screens = useBreakpoint();
   const [collapsed, setCollapsed] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const HEADER_HEIGHT = 64;
+  
+  // Determinar si estamos en móvil
+  const isMobile = !screens.md;
 
 
   const { selectedKeys, openKeys } = useMemo(() => {
@@ -164,6 +170,33 @@ export default function SidebarLayout({
     </div>
   );
 
+  // Componente del menú móvil
+  const MobileMenu = () => (
+    <Drawer
+      title={
+        <div className="flex items-center gap-2">
+          {logoNode}
+          <span className="font-semibold">{title}</span>
+        </div>
+      }
+      placement="left"
+      onClose={() => setMobileMenuOpen(false)}
+      open={mobileMenuOpen}
+      width={280}
+      closeIcon={<CloseOutlined />}
+      className="mobile-menu-drawer"
+    >
+      <Menu
+        mode="inline"
+        items={antdItems}
+        selectedKeys={selectedKeys}
+        defaultOpenKeys={openKeys}
+        className="!border-r-0"
+        onClick={() => setMobileMenuOpen(false)}
+      />
+    </Drawer>
+  );
+
   if (headerAcross) {
     return (
       <Layout className="min-h-screen">
@@ -171,78 +204,110 @@ export default function SidebarLayout({
           className="bg-white h-16 px-4 flex items-center justify-between shadow-sm"
           style={{ position: "sticky", top: 0, zIndex: 100, width: "100%" }}
         >
-          <div className="font-medium">{title}</div>
+          <div className="flex items-center gap-3">
+            {isMobile && (
+              <Button
+                type="text"
+                icon={<MenuOutlined />}
+                onClick={() => setMobileMenuOpen(true)}
+                className="flex items-center justify-center"
+                size="large"
+              />
+            )}
+            <div className="font-medium">{title}</div>
+          </div>
           <div>{headerRight}</div>
         </Header>
 
         <Layout hasSider>
-          <Sider
-            collapsible
-            collapsed={collapsed}
-            onCollapse={setCollapsed}
-            width={width}
-            breakpoint="lg"
-            collapsedWidth={screens.xs ? 0 : 80}
-            className="!bg-white"
-            style={{
-              position: "sticky",
-              top: HEADER_HEIGHT,
-              height: `calc(100vh - ${HEADER_HEIGHT}px)`,
-              overflow: "auto",
-            }}
-          >
-            <div className="flex items-center gap-2 h-16 px-4 border-b border-gray-100">
-              {logoNode}
-              {!collapsed && <span className="font-semibold truncate app-title">{title}</span>}
-            </div>
-            <Menu
-              mode="inline"
-              items={antdItems}
-              selectedKeys={selectedKeys}
-              defaultOpenKeys={openKeys}
-              className="!border-r-0"
-            />
-          </Sider>
+          {!isMobile && (
+            <Sider
+              collapsible
+              collapsed={collapsed}
+              onCollapse={setCollapsed}
+              width={width}
+              breakpoint="lg"
+              collapsedWidth={80}
+              className="!bg-white"
+              style={{
+                position: "sticky",
+                top: HEADER_HEIGHT,
+                height: `calc(100vh - ${HEADER_HEIGHT}px)`,
+                overflow: "auto",
+              }}
+            >
+              <div className="flex items-center gap-2 h-16 px-4 border-b border-gray-100">
+                {logoNode}
+                {!collapsed && <span className="font-semibold truncate app-title">{title}</span>}
+              </div>
+              <Menu
+                mode="inline"
+                items={antdItems}
+                selectedKeys={selectedKeys}
+                defaultOpenKeys={openKeys}
+                className="!border-r-0"
+              />
+            </Sider>
+          )}
 
           <Content className="p-4 bg-gray-50" style={{ minHeight: `calc(100vh - ${HEADER_HEIGHT}px)` }}>
             {children}
           </Content>
         </Layout>
+        
+        {/* Menú móvil */}
+        <MobileMenu />
       </Layout>
     );
   }
 
   return (
     <Layout className="min-h-screen">
-      <Sider
-        collapsible
-        collapsed={collapsed}
-        onCollapse={setCollapsed}
-        width={width}
-        breakpoint="lg"
-        collapsedWidth={screens.xs ? 0 : 80}
-        className="!bg-white"
-      >
-        <div className="flex items-center gap-2 h-16 px-4 border-b border-gray-100">
-          {logoNode}
-          {!collapsed && <span className="font-semibold truncate app-title">{title}</span>}
-        </div>
-        <Menu
-          mode="inline"
-          items={antdItems}
-          selectedKeys={selectedKeys}
-          defaultOpenKeys={openKeys}
-          className="!border-r-0"
-        />
-      </Sider>
+      {!isMobile && (
+        <Sider
+          collapsible
+          collapsed={collapsed}
+          onCollapse={setCollapsed}
+          width={width}
+          breakpoint="lg"
+          collapsedWidth={80}
+          className="!bg-white"
+        >
+          <div className="flex items-center gap-2 h-16 px-4 border-b border-gray-100">
+            {logoNode}
+            {!collapsed && <span className="font-semibold truncate app-title">{title}</span>}
+          </div>
+          <Menu
+            mode="inline"
+            items={antdItems}
+            selectedKeys={selectedKeys}
+            defaultOpenKeys={openKeys}
+            className="!border-r-0"
+          />
+        </Sider>
+      )}
 
       <Layout>
         <Header className="bg-white h-16 px-4 flex items-center justify-between shadow-sm">
-          <div className="font-medium app-title">{title}</div>
+          <div className="flex items-center gap-3">
+            {isMobile && (
+              <Button
+                type="text"
+                icon={<MenuOutlined />}
+                onClick={() => setMobileMenuOpen(true)}
+                className="flex items-center justify-center"
+                size="large"
+              />
+            )}
+            <div className="font-medium app-title">{title}</div>
+          </div>
           <div>{headerRight}</div>
         </Header>
         <Content className="p-4 bg-gray-50 min-h-[calc(100vh-4rem)]">{children}</Content>
       </Layout>
+      
+      {/* Menú móvil */}
+      <MobileMenu />
     </Layout>
   );
 }
