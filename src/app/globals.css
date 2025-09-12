@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -39,4 +43,56 @@ a {
   html {
     color-scheme: dark;
   }
+}
+
+.error-message {
+  color: red;
+}
+
+.team-card {
+  width: 100%;
+}
+
+.main-content {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    padding: 3rem 1rem;
+  }
+}
+
+.title-main {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 3rem;
+  color: #333;
+}	
+
+.search-container {
+  display: flex;
+    margin: 10px;
+    gap: 10px;
+}
+.drivers-container {
+ width: 100%;
+ margin: 30px;
+}
+
+.app-title {
+  color: #ffffff;
+}
+
+.card-actions {
+margin: 8px;
+}
+
+.icon-card {
+  gap: 5px;
 }
