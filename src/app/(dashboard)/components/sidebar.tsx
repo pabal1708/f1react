@@ -204,13 +204,13 @@ export default function SidebarLayout({
           className="bg-white h-16 px-4 flex items-center justify-between shadow-sm"
           style={{ position: "sticky", top: 0, zIndex: 100, width: "100%" }}
         >
-          <div className="flex items-center gap-3">
+          <div className="flex items-start gap-3">
             {isMobile && (
               <Button
                 type="text"
                 icon={<MenuOutlined />}
                 onClick={() => setMobileMenuOpen(true)}
-                className="flex items-center justify-center"
+                className="hamburger-button"
                 size="large"
               />
             )}
@@ -289,13 +289,13 @@ export default function SidebarLayout({
 
       <Layout>
         <Header className="bg-white h-16 px-4 flex items-center justify-between shadow-sm">
-          <div className="flex items-center gap-3">
+          <div className="flex items-start gap-3">
             {isMobile && (
               <Button
                 type="text"
                 icon={<MenuOutlined />}
                 onClick={() => setMobileMenuOpen(true)}
-                className="flex items-center justify-center"
+                className="hamburger-button"
                 size="large"
               />
             )}

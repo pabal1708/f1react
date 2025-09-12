@@ -143,6 +143,27 @@ margin: 8px;
 }
 
 /* Mejorar el botón hamburguesa en móviles */
+.hamburger-button {
+  padding: 8px;
+  height: auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.hamburger-button .anticon {
+  color: #ffffff;
+  font-size: 18px;
+}
+
+.hamburger-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.hamburger-button:hover .anticon {
+  color: #ffffff;
+}
+
 @media (max-width: 768px) {
   .ant-btn-text {
     padding: 8px;

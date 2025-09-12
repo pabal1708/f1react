@@ -115,10 +115,17 @@ export default function ChartsPage() {
       setLoading(false);
       setIsFetching(false);
     }
-  }, [isFetching]);
+  }, []);
 
   // Debouncing para búsqueda por año
   useEffect(() => {
+    if (!year.trim()) {
+      setDriversChampionship([]);
+      setConstructorsChampionship([]);
+      setError(null);
+      return;
+    }
+
     const timeoutId = setTimeout(() => {
       const yearNum = parseInt(year.trim(), 10);
       const isValidYear = year.trim().length === 4 && 
@@ -127,13 +134,13 @@ export default function ChartsPage() {
                          yearNum >= 1950 && 
                          yearNum <= 2024;
       
-      if (isValidYear) {
+      if (isValidYear && !isFetching) {
         handleFetchChampionships(year);
       }
     }, 500);
 
     return () => clearTimeout(timeoutId);
-  }, [year, handleFetchChampionships]);
+  }, [year, isFetching, handleFetchChampionships]);
 
   return (
     <main className="main-content">
