@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { Input, Button, Spin, Typography, Card, Row, Col } from "antd";
+import { Input, Button, Spin, Typography, Card, Row, Col, Divider } from "antd";
 import { SearchOutlined, TrophyOutlined, CarOutlined } from "@ant-design/icons";
 import {
   BarChart,
@@ -211,6 +211,7 @@ export default function ChartsPage() {
                 bordered={false}
                 className="h-full shadow-md rounded-lg"
               >
+                <Divider className="my-2" />
                 <ResponsiveContainer width="100%" height={300}>
                   <BarChart
                     data={driversChampionship.map((d) => ({
@@ -243,6 +244,7 @@ export default function ChartsPage() {
                 bordered={false}
                 className="h-full shadow-md rounded-lg"
               >
+                <Divider className="my-2" />
                 <ResponsiveContainer width="100%" height={300}>
                   <BarChart
                     data={constructorsChampionship.map((c) => ({

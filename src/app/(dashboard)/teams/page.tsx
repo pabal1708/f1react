@@ -65,16 +65,16 @@ const Teams = () => {
                 hoverable
                 className="team-card h-full flex flex-col"
               >
-                <p className="text-gray-700"><strong>Nationality:</strong> {team.teamNationality}</p>
-                <p className="text-gray-700"><strong>First Appearance:</strong> {team.firstAppeareance}</p>
-                <p className="text-gray-700"><strong>Constructors Championships:</strong> {team.constructorsChampionships}</p>
-                <p className="text-gray-700"><strong>Drivers Championships:</strong> {team.driversChampionships}</p>
+                <p className="text-gray-700"><strong>Nacionalidad:</strong> {team.teamNationality}</p>
+                <p className="text-gray-700"><strong>Primera Aparición:</strong> {team.firstAppeareance}</p>
+                <p className="text-gray-700"><strong>Campeonatos de Constructores:</strong> {team.constructorsChampionships}</p>
+                <p className="text-gray-700"><strong>Campeonatos de Pilotos:</strong> {team.driversChampionships}</p>
                 <div className="mt-auto flex justify-between card-actions">
                   <Typography.Link href={team.url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
-                    More Info
+                    Más Info
                   </Typography.Link>
                   <Link href={`/drivers/${team.teamId}`} className="text-blue-600 hover:underline">
-                    View Drivers
+                    Ver Pilotos
                   </Link>
                 </div>
               </Card>

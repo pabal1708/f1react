@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { Input, Button, Spin, Typography, Card, Row, Col } from "antd";
-import { SearchOutlined } from "@ant-design/icons";
+import { Input, Button, Spin, Typography, Card, Row, Col, Divider } from "antd";
+import { SearchOutlined, CarOutlined } from "@ant-design/icons";
 
 const { Text } = Typography;
 
@@ -193,11 +193,17 @@ export default function Drivers() {
             {drivers.map((driver: any) => (
               <Col key={driver.driverId} xs={54} sm={12} md={8} lg={6}>
                 <Card
-                  title={`${driver.name} ${driver.surname}`}
+                  title={
+                    <span className="flex items-center gap-2">
+                      <CarOutlined />
+                      {`${driver.name} ${driver.surname}`}
+                    </span>
+                  }
                   bordered={false}
                   hoverable
                   className="driver-card h-full flex flex-col"
                 >
+                  <Divider className="my-2" />
                   <p className="text-gray-700"><strong>Nacionalidad:</strong> {driver.nationality}</p>
                   {driver.birthday && <p className="text-gray-700"><strong>Cumpleaños:</strong> {driver.birthday}</p>}
                   {driver.number && <p className="text-gray-700"><strong>Número:</strong> {driver.number}</p>}
