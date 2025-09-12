@@ -38,7 +38,7 @@ interface ConstructorChampionshipData {
   wins: number;
 }
 
-export default function ChartsPage() {
+const ChartsPage = () => {
   const [year, setYear] = useState<string>("");
   const [driversChampionship, setDriversChampionship] = useState<
     DriverChampionshipData[]
@@ -51,12 +51,10 @@ export default function ChartsPage() {
   const [isFetching, setIsFetching] = useState<boolean>(false);
 
   const handleFetchChampionships = useCallback(async (yearToFetch: string) => {
-    // Prevenir múltiples búsquedas simultáneas
     if (isFetching) {
       return;
     }
 
-    // Validación mejorada del año
     if (!yearToFetch || typeof yearToFetch !== 'string') {
       setError("Por favor, introduce un año válido.");
       setDriversChampionship([]);
@@ -115,9 +113,8 @@ export default function ChartsPage() {
       setLoading(false);
       setIsFetching(false);
     }
-  }, []);
+  }, [isFetching]);
 
-  // Debouncing para búsqueda por año
   useEffect(() => {
     if (!year.trim()) {
       setDriversChampionship([]);
@@ -158,7 +155,6 @@ export default function ChartsPage() {
               const newYear = e?.target?.value || "";
               setYear(newYear);
               
-              // Limpiar resultados si el año no es válido
               const yearNum = parseInt(newYear, 10);
               const isValidYear = newYear.trim().length === 4 && 
                                 /^[0-9]{4}$/.test(newYear) && 
@@ -296,4 +292,6 @@ export default function ChartsPage() {
       </div>
     </main>
   );
-}
+};
+
+export default ChartsPage;

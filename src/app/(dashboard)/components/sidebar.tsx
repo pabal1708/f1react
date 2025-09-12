@@ -20,7 +20,7 @@ const { Sider, Header, Content } = Layout;
 const { useBreakpoint } = Grid;
 
 // --- tiny inline logo related to racing (chequered flag) ---
-function RacingLogo({ size = 20 }: { size?: number }) {
+const RacingLogo = ({ size = 20 }: { size?: number }) => {
   return (
     <svg
       width={size}
@@ -51,7 +51,7 @@ function RacingLogo({ size = 20 }: { size?: number }) {
       </g>
     </svg>
   );
-}
+};
 
 type MenuItem = Required<MenuProps>["items"][number];
 
@@ -88,7 +88,7 @@ export type SidebarLayoutProps = {
   headerAcross?: boolean;
 };
 
-function mapToAntdItems(nodes: NavNode[]): MenuItem[] {
+const mapToAntdItems = (nodes: NavNode[]): MenuItem[] => {
   return nodes.map((node) => {
     const base = {
       key: node.key,
@@ -119,9 +119,9 @@ function mapToAntdItems(nodes: NavNode[]): MenuItem[] {
       ),
     } satisfies MenuItem;
   });
-}
+};
 
-export default function SidebarLayout({
+const SidebarLayout = ({
   title = "App",
   logo,
   items,
@@ -130,7 +130,7 @@ export default function SidebarLayout({
   defaultOpenKeys,
   headerRight,
   headerAcross = true,
-}: SidebarLayoutProps) {
+}: SidebarLayoutProps) => {
   const pathname = usePathname();
   const screens = useBreakpoint();
   const [collapsed, setCollapsed] = useState(false);
@@ -310,6 +310,6 @@ export default function SidebarLayout({
       <MobileMenu />
     </Layout>
   );
-}
+};
 
-
+export default SidebarLayout;

@@ -6,7 +6,7 @@ import { SearchOutlined, CarOutlined } from "@ant-design/icons";
 
 const { Text } = Typography;
 
-export default function Drivers() {
+const Drivers = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [drivers, setDrivers] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
@@ -227,4 +227,6 @@ export default function Drivers() {
       </div>
     </main>
   );
-}
+};
+
+export default Drivers;
