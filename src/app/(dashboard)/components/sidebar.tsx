@@ -8,19 +8,12 @@ import { Layout, Menu, Grid, Button, Drawer } from "antd";
 import {
   MenuOutlined,
   CloseOutlined,
-  // HomeOutlined,
-  // TeamOutlined,
-  // SettingOutlined,
-  // PieChartOutlined,
-  // FileTextOutlined,
-  // QuestionCircleOutlined,
 } from "@ant-design/icons";
 
 const { Sider, Header, Content } = Layout;
 const { useBreakpoint } = Grid;
 
-// --- tiny inline logo related to racing (chequered flag) ---
-function RacingLogo({ size = 20 }: { size?: number }) {
+const RacingLogo = ({ size = 20 }: { size?: number }) => {
   return (
     <svg
       width={size}
@@ -51,7 +44,7 @@ function RacingLogo({ size = 20 }: { size?: number }) {
       </g>
     </svg>
   );
-}
+};
 
 type MenuItem = Required<MenuProps>["items"][number];
 
@@ -67,7 +60,7 @@ type NavItemBase = {
 };
 
 type NavLeaf = NavItemBase & {
-  href: string; // internal or external
+  href: string;
 };
 
 type NavBranch = NavItemBase & {
@@ -84,11 +77,10 @@ export type SidebarLayoutProps = {
   width?: number;
   defaultOpenKeys?: string[];
   headerRight?: React.ReactNode;
-  /** If true, header goes across the top and sidebar starts below it */
   headerAcross?: boolean;
 };
 
-function mapToAntdItems(nodes: NavNode[]): MenuItem[] {
+const mapToAntdItems = (nodes: NavNode[]): MenuItem[] => {
   return nodes.map((node) => {
     const base = {
       key: node.key,
@@ -119,9 +111,9 @@ function mapToAntdItems(nodes: NavNode[]): MenuItem[] {
       ),
     } satisfies MenuItem;
   });
-}
+};
 
-export default function SidebarLayout({
+const SidebarLayout = ({
   title = "App",
   logo,
   items,
@@ -130,14 +122,13 @@ export default function SidebarLayout({
   defaultOpenKeys,
   headerRight,
   headerAcross = true,
-}: SidebarLayoutProps) {
+}: SidebarLayoutProps) => {
   const pathname = usePathname();
   const screens = useBreakpoint();
   const [collapsed, setCollapsed] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const HEADER_HEIGHT = 64;
   
-  // Determinar si estamos en móvil
   const isMobile = !screens.md;
 
 
@@ -170,7 +161,6 @@ export default function SidebarLayout({
     </div>
   );
 
-  // Componente del menú móvil
   const MobileMenu = () => (
     <Drawer
       title={
@@ -204,17 +194,16 @@ export default function SidebarLayout({
           className="bg-white h-16 px-4 flex items-center justify-between shadow-sm"
           style={{ position: "sticky", top: 0, zIndex: 100, width: "100%" }}
         >
-          <div className="flex items-center gap-3">
+          <div className="flex items-start gap-3">
             {isMobile && (
               <Button
                 type="text"
                 icon={<MenuOutlined />}
                 onClick={() => setMobileMenuOpen(true)}
-                className="flex items-center justify-center"
+                className="hamburger-button"
                 size="large"
               />
             )}
-            <div className="font-medium">{title}</div>
           </div>
           <div>{headerRight}</div>
         </Header>
@@ -254,8 +243,6 @@ export default function SidebarLayout({
             {children}
           </Content>
         </Layout>
-        
-        {/* Menú móvil */}
         <MobileMenu />
       </Layout>
     );
@@ -289,27 +276,24 @@ export default function SidebarLayout({
 
       <Layout>
         <Header className="bg-white h-16 px-4 flex items-center justify-between shadow-sm">
-          <div className="flex items-center gap-3">
+          <div className="flex items-start gap-3">
             {isMobile && (
               <Button
                 type="text"
                 icon={<MenuOutlined />}
                 onClick={() => setMobileMenuOpen(true)}
-                className="flex items-center justify-center"
+                className="hamburger-button"
                 size="large"
               />
             )}
-            <div className="font-medium app-title">{title}</div>
           </div>
           <div>{headerRight}</div>
         </Header>
         <Content className="p-4 bg-gray-50 min-h-[calc(100vh-4rem)]">{children}</Content>
       </Layout>
-      
-      {/* Menú móvil */}
       <MobileMenu />
     </Layout>
   );
-}
+};
 
-
+export default SidebarLayout;

@@ -1,6 +1,8 @@
 import { redirect } from 'next/navigation';
 
-export default function HomePage() {
+const HomePage = () => {
   // Redirect to teams page as the main page
   redirect('/teams');
-}
+};
+
+export default HomePage;

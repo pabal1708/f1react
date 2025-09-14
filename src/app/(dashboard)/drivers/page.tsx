@@ -3,35 +3,28 @@
 import { useState, useEffect, useCallback } from "react";
 import { Input, Button, Spin, Typography, Card, Row, Col, Divider } from "antd";
 import { SearchOutlined, CarOutlined } from "@ant-design/icons";
+import { isValidYear } from "@/app/utils/yearValidation";
 
 const { Text } = Typography;
 
-export default function Drivers() {
+const Drivers = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [drivers, setDrivers] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [yearSearchQuery, setYearSearchQuery] = useState("");
-  const [isSearching, setIsSearching] = useState(false);
 
   const handleSearch = useCallback(async (queryToSearch?: string, yearToSearch?: string) => {
-    // Prevenir múltiples búsquedas simultáneas
-    if (isSearching) {
-      return;
-    }
-
     try {
       const currentNameQuery = queryToSearch !== undefined ? queryToSearch : searchQuery;
       const currentYearQuery = yearToSearch !== undefined ? yearToSearch : yearSearchQuery;
 
-      // Validar inputs
       if (!currentNameQuery && !currentYearQuery) {
         setError("Por favor, introduce un nombre o un año para buscar.");
         setDrivers([]);
         return;
       }
 
-      setIsSearching(true);
       setError(null);
       setLoading(true);
       setDrivers([]);
@@ -39,15 +32,7 @@ export default function Drivers() {
       let response;
       let data;
 
-      // Validar año con rango
-      const yearNum = parseInt(currentYearQuery.trim(), 10);
-      const isValidYear = currentYearQuery.trim().length === 4 && 
-                         /^[0-9]{4}$/.test(currentYearQuery.trim()) && 
-                         !isNaN(yearNum) &&
-                         yearNum >= 1950 && 
-                         yearNum <= 2024;
-
-      if (isValidYear) {
+      if (isValidYear(currentYearQuery)) {
         response = await fetch(`https://f1api.dev/api/${currentYearQuery.trim()}/drivers`);
         if (!response.ok) {
           throw new Error(`Error al buscar por año: ${response.statusText}`);
@@ -77,11 +62,37 @@ export default function Drivers() {
       setDrivers([]);
     } finally {
       setLoading(false);
-      setIsSearching(false);
     }
-  }, [searchQuery, yearSearchQuery, isSearching]);
+  }, [searchQuery, yearSearchQuery]);
 
-  // Debouncing para búsqueda por nombre
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    try {
+      const newQuery = e?.target?.value || "";
+      setSearchQuery(newQuery);
+      if (newQuery.trim().length <= 3 && (drivers.length > 0 || error)) {
+        setDrivers([]);
+        setError(null);
+      }
+    } catch (err) {
+      console.error("Error in name input onChange:", err);
+      setError("Error al procesar la búsqueda por nombre.");
+    }
+  };
+
+  const handleYearSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    try {
+      const newYearQuery = e?.target?.value || "";
+      setYearSearchQuery(newYearQuery);
+      if (!isValidYear(newYearQuery) && (drivers.length > 0 || error)) {
+        setDrivers([]);
+        setError(null);
+      }
+    } catch (err) {
+      console.error("Error in year input onChange:", err);
+      setError("Error al procesar el año ingresado.");
+    }
+  };
+
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       if (searchQuery.trim().length > 3) {
@@ -92,17 +103,9 @@ export default function Drivers() {
     return () => clearTimeout(timeoutId);
   }, [searchQuery, handleSearch]);
 
-  // Debouncing para búsqueda por año
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      const yearNum = parseInt(yearSearchQuery.trim(), 10);
-      const isValidYear = yearSearchQuery.trim().length === 4 && 
-                         /^[0-9]{4}$/.test(yearSearchQuery.trim()) && 
-                         !isNaN(yearNum) &&
-                         yearNum >= 1950 && 
-                         yearNum <= 2024;
-      
-      if (isValidYear) {
+      if (isValidYear(yearSearchQuery)) {
         handleSearch(undefined, yearSearchQuery);
       }
     }, 500);
@@ -116,24 +119,10 @@ export default function Drivers() {
       <div className="page-content">
         <div className="search-container">
         <Input
-          placeholder="Buscar piloto por nombre..."
+          placeholder="Buscar piloto por nombre (ej: Hamilton)"
           value={searchQuery}
-          onChange={(e) => {
-            try {
-              const newQuery = e?.target?.value || "";
-              setSearchQuery(newQuery);
-              
-              // Limpiar resultados si la búsqueda es muy corta
-              if (newQuery.trim().length <= 3 && (drivers.length > 0 || error)) {
-                setDrivers([]);
-                setError(null);
-              }
-            } catch (err) {
-              console.error("Error in name input onChange:", err);
-              setError("Error al procesar la búsqueda por nombre.");
-            }
-          }}
-          onPressEnter={() => handleSearch(searchQuery)}
+          onChange={handleSearchChange}
+          onPressEnter={() => handleSearch(searchQuery, undefined)}
           size="large"
           suffix={
             <Button
@@ -147,30 +136,9 @@ export default function Drivers() {
           }
         />
         <Input
-          placeholder="Buscar piloto por año (ej: 2010)"
+          placeholder="Buscar piloto por año (ej: 2021)"
           value={yearSearchQuery}
-          onChange={(e) => {
-            try {
-              const newYearQuery = e?.target?.value || "";
-              setYearSearchQuery(newYearQuery);
-              
-              // Limpiar resultados si el año no es válido
-              const yearNum = parseInt(newYearQuery, 10);
-              const isValidYear = newYearQuery.trim().length === 4 && 
-                                /^[0-9]{4}$/.test(newYearQuery) && 
-                                !isNaN(yearNum) &&
-                                yearNum >= 1950 && 
-                                yearNum <= 2024;
-              
-              if (!isValidYear && (drivers.length > 0 || error)) {
-                setDrivers([]);
-                setError(null);
-              }
-            } catch (err) {
-              console.error("Error in year input onChange:", err);
-              setError("Error al procesar la búsqueda por año.");
-            }
-          }}
+          onChange={handleYearSearchChange}
           onPressEnter={() => handleSearch(undefined, yearSearchQuery)}
           size="large"
           type="number"
@@ -204,7 +172,6 @@ export default function Drivers() {
                   hoverable
                   className="driver-card h-full flex flex-col"
                 >
-                  <Divider className="my-2" />
                   <p className="text-gray-700"><strong>Nacionalidad:</strong> {driver.nationality}</p>
                   {driver.birthday && <p className="text-gray-700"><strong>Cumpleaños:</strong> {driver.birthday}</p>}
                   {driver.number && <p className="text-gray-700"><strong>Número:</strong> {driver.number}</p>}
@@ -218,7 +185,7 @@ export default function Drivers() {
             ))}
           </Row>
           </div>
-        ) : ( searchQuery.trim() && !loading && !error && yearSearchQuery.trim() && !/^[0-9]{4}$/.test(yearSearchQuery) ? (
+        ) : ( searchQuery.trim() && !loading && !error && yearSearchQuery.trim() && !isValidYear(yearSearchQuery) ? (
           <Text type="secondary">No se encontraron pilotos que coincidan con la búsqueda.</Text>
         ) : (
           <Text type="secondary">Introduce un nombre de piloto (al menos 4 caracteres) o un año (4 dígitos) para buscar.</Text>
@@ -227,4 +194,6 @@ export default function Drivers() {
       </div>
     </main>
   );
-}
+};
+
+export default Drivers;

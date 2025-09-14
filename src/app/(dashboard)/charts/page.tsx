@@ -13,6 +13,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
+import { isValidYear } from "@/app/utils/yearValidation";
 
 const { Text } = Typography;
 
@@ -38,7 +39,7 @@ interface ConstructorChampionshipData {
   wins: number;
 }
 
-export default function ChartsPage() {
+const ChartsPage = () => {
   const [year, setYear] = useState<string>("");
   const [driversChampionship, setDriversChampionship] = useState<
     DriverChampionshipData[]
@@ -48,35 +49,21 @@ export default function ChartsPage() {
   >([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [isFetching, setIsFetching] = useState<boolean>(false);
 
   const handleFetchChampionships = useCallback(async (yearToFetch: string) => {
-    // Prevenir múltiples búsquedas simultáneas
-    if (isFetching) {
-      return;
-    }
-
-    // Validación mejorada del año
     if (!yearToFetch || typeof yearToFetch !== 'string') {
       setError("Por favor, introduce un año válido.");
       setDriversChampionship([]);
       setConstructorsChampionship([]);
       return;
     }
-
-    const yearNum = parseInt(yearToFetch.trim(), 10);
-    if (!yearToFetch.trim() || 
-        !/^[0-9]{4}$/.test(yearToFetch.trim()) || 
-        isNaN(yearNum) || 
-        yearNum < 1950 || 
-        yearNum > 2024) {
+    if  (!isValidYear(yearToFetch)) {
       setError("Por favor, introduce un año válido entre 1950 y 2024.");
       setDriversChampionship([]);
       setConstructorsChampionship([]);
       return;
     }
 
-    setIsFetching(true);
     setError(null);
     setLoading(true);
     setDriversChampionship([]);
@@ -113,27 +100,46 @@ export default function ChartsPage() {
       setError("No se pudieron cargar los datos del campeonato. Inténtalo de nuevo más tarde.");
     } finally {
       setLoading(false);
-      setIsFetching(false);
     }
-  }, [isFetching]);
+  }, []);
 
-  // Debouncing para búsqueda por año
   useEffect(() => {
+    if (!year.trim()) {
+      setDriversChampionship([]);
+      setConstructorsChampionship([]);
+      setError(null);
+      return;
+    }
+
     const timeoutId = setTimeout(() => {
-      const yearNum = parseInt(year.trim(), 10);
-      const isValidYear = year.trim().length === 4 && 
-                         /^[0-9]{4}$/.test(year.trim()) && 
-                         !isNaN(yearNum) &&
-                         yearNum >= 1950 && 
-                         yearNum <= 2024;
       
-      if (isValidYear) {
+      if (isValidYear(year)) {
         handleFetchChampionships(year);
       }
     }, 500);
 
     return () => clearTimeout(timeoutId);
-  }, [year, handleFetchChampionships]);
+  }, [year]);
+
+  const handleYearChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    try {
+      const newYear = e?.target?.value || "";
+      setYear(newYear);
+      
+      if (!isValidYear(newYear) && (
+        driversChampionship.length > 0 ||
+        constructorsChampionship.length > 0 ||
+        error
+      )) {
+        setDriversChampionship([]);
+        setConstructorsChampionship([]);
+        setError(null);
+      }
+    } catch (err) {
+      console.error("Error in year input onChange:", err);
+      setError("Error al procesar el año ingresado.");
+    }
+  };
 
   return (
     <main className="main-content">
@@ -142,37 +148,11 @@ export default function ChartsPage() {
       </h1>
 
       <div className="page-content">
-        <div className="w-full max-w-md mb-8 flex gap-2">
+        <div className="w-1/2 mb-8 flex gap-2 mx-auto">
         <Input
           placeholder="Introduce un año (ej: 2021)"
           value={year}
-          onChange={(e) => {
-            try {
-              const newYear = e?.target?.value || "";
-              setYear(newYear);
-              
-              // Limpiar resultados si el año no es válido
-              const yearNum = parseInt(newYear, 10);
-              const isValidYear = newYear.trim().length === 4 && 
-                                /^[0-9]{4}$/.test(newYear) && 
-                                !isNaN(yearNum) &&
-                                yearNum >= 1950 && 
-                                yearNum <= 2024;
-              
-              if (!isValidYear && (
-                driversChampionship.length > 0 ||
-                constructorsChampionship.length > 0 ||
-                error
-              )) {
-                setDriversChampionship([]);
-                setConstructorsChampionship([]);
-                setError(null);
-              }
-            } catch (err) {
-              console.error("Error in year input onChange:", err);
-              setError("Error al procesar el año ingresado.");
-            }
-          }}
+          onChange={handleYearChange}
           onPressEnter={() => handleFetchChampionships(year)}
           size="large"
           type="number"
@@ -289,4 +269,6 @@ export default function ChartsPage() {
       </div>
     </main>
   );
-}
+};
+
+export default ChartsPage;

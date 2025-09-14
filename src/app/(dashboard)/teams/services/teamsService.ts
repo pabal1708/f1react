@@ -1,5 +1,3 @@
-// Servicio para la obtención de datos de equipos
-
 interface Team {
   teamId: string;
   teamName: string;

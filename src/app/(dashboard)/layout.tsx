@@ -8,7 +8,7 @@ import {
 
 export const metadata = { title: "F1 Dashboard" };
 
-export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   const items = [
     { key: "home", label: "Inicio", href: "/", icon: <HomeOutlined /> },
     { key: "teams", label: "Teams", href: "/teams", icon: <TeamOutlined /> },
@@ -22,4 +22,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       {children}
     </SidebarLayout>
   );
-}
+};
+
+export default DashboardLayout;
