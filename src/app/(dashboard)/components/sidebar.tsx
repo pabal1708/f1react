@@ -8,18 +8,11 @@ import { Layout, Menu, Grid, Button, Drawer } from "antd";
 import {
   MenuOutlined,
   CloseOutlined,
-  // HomeOutlined,
-  // TeamOutlined,
-  // SettingOutlined,
-  // PieChartOutlined,
-  // FileTextOutlined,
-  // QuestionCircleOutlined,
 } from "@ant-design/icons";
 
 const { Sider, Header, Content } = Layout;
 const { useBreakpoint } = Grid;
 
-// --- tiny inline logo related to racing (chequered flag) ---
 const RacingLogo = ({ size = 20 }: { size?: number }) => {
   return (
     <svg
@@ -67,7 +60,7 @@ type NavItemBase = {
 };
 
 type NavLeaf = NavItemBase & {
-  href: string; // internal or external
+  href: string;
 };
 
 type NavBranch = NavItemBase & {
@@ -84,7 +77,6 @@ export type SidebarLayoutProps = {
   width?: number;
   defaultOpenKeys?: string[];
   headerRight?: React.ReactNode;
-  /** If true, header goes across the top and sidebar starts below it */
   headerAcross?: boolean;
 };
 
@@ -137,7 +129,6 @@ const SidebarLayout = ({
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const HEADER_HEIGHT = 64;
   
-  // Determinar si estamos en móvil
   const isMobile = !screens.md;
 
 
@@ -170,7 +161,6 @@ const SidebarLayout = ({
     </div>
   );
 
-  // Componente del menú móvil
   const MobileMenu = () => (
     <Drawer
       title={
@@ -214,7 +204,6 @@ const SidebarLayout = ({
                 size="large"
               />
             )}
-            <div className="font-medium">{title}</div>
           </div>
           <div>{headerRight}</div>
         </Header>
@@ -254,8 +243,6 @@ const SidebarLayout = ({
             {children}
           </Content>
         </Layout>
-        
-        {/* Menú móvil */}
         <MobileMenu />
       </Layout>
     );
@@ -299,14 +286,11 @@ const SidebarLayout = ({
                 size="large"
               />
             )}
-            <div className="font-medium app-title">{title}</div>
           </div>
           <div>{headerRight}</div>
         </Header>
         <Content className="p-4 bg-gray-50 min-h-[calc(100vh-4rem)]">{children}</Content>
       </Layout>
-      
-      {/* Menú móvil */}
       <MobileMenu />
     </Layout>
   );

@@ -67,7 +67,6 @@ const DriversClientComponent = ({
                   hoverable
                   className="driver-card h-full flex flex-col"
                 >
-                  <Divider className="my-2" />
                   <p className="text-gray-700">
                     <strong>Nacionalidad:</strong> {driver.nationality}
                   </p>
